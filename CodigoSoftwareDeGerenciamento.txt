@@ -1,0 +1,343 @@
+#include <stdlib.h>
+#include <string.h>
+#include <locale.h>
+#include <ctype.h>
+#include <stdio.h>
+
+
+typedef struct
+{
+    char nome[20],email[30], senha[8], cargo[20], area[15];
+    int qtd_Func;
+} cadastro_funcionario;
+
+
+
+typedef struct
+{
+    char nome[60], rg[10], cpf[14], endereco[30], telefone[10], email[30], plano, pagto, municipio;
+    int qtd_Cliente;
+} cadastro_cliente;
+
+
+
+void cadastrarFunc(cadastro_funcionario cadastro[100]){
+    int i;
+    char s_n;
+
+    do{ printf("\n------- CADASTRO FUNCIONÁRIO -------\n");
+
+        printf("Nome completo: ");
+        gets(cadastro[i].nome);
+        printf("E-mail: ");
+        gets(cadastro[i].email);
+        printf("Senha: ");
+        gets(cadastro[i].senha);
+        printf("Cargo: ");
+        gets(cadastro[i].cargo);
+        printf("Área de trabalho: ");
+        gets(cadastro[i].area);
+        printf("\nDESEJA CONTINUAR CADASTRANDO? (S/N)\n");
+        scanf("%c", &s_n);
+        s_n=tolower(s_n);
+        i++;
+
+    }while(s_n!='n');
+    printf("\nCadastro de Funcioncionário concluído com sucesso!\n");
+
+}
+
+void cliente(cadastro_cliente cad[100]){
+
+    char s_n, cpf[14], rep[4];
+    int i=0, icpf [11], i_cpf, soma = 0, s = 0, cpf1, cpf2, dig1, dig2, cond;
+
+    do{
+        printf("\n------- CADASTRO CLIENTE -------\n");
+        while ((getchar()) != '\n');
+        printf("Nome completo: ");
+        gets(cad[i].nome);
+        printf("RG: ");
+        gets(cad[i].rg);
+        do{
+            i_cpf=0;    cpf1=0;     dig2=0;
+            soma=0;     cpf2=0;     cond=0;
+            s=0;        dig1=0;
+
+            printf("CPF: ");
+            gets(cpf);
+            cond=strlen(cpf);
+                for(i_cpf = 0; i_cpf < cond; i_cpf++){
+                    if(cpf[i_cpf]!='.' && cpf[i_cpf]!='-'){
+                        icpf[s]=cpf[i_cpf]-48;
+                        s++;
+                    }
+                }
+                if (icpf[0] != icpf[1] && icpf[2] != icpf[3] && icpf[4] != icpf[5]){
+
+                for(i_cpf=0 ; i_cpf < 9 ; i_cpf ++){
+                    soma+=icpf[i_cpf]*(10-i_cpf);
+                }
+                cpf1 = soma%11;
+
+                if(cpf1 == 0 || cpf1 == 1){
+                    dig1=0;
+                }else{
+                    dig1=11-cpf1;
+                }
+                soma=0;
+                for(i_cpf = 0; i_cpf<10 ; i_cpf++){
+                    soma += icpf[i_cpf]*(11-i_cpf);
+                }
+                cpf2=soma%11;
+                if(cpf2 == 0 || cpf2 == 1){
+                    dig2=0;
+                }
+                else{
+                    dig2=11-cpf2;
+                }
+
+                if(icpf[9] == dig1 && icpf [10] == dig2){
+                    printf("\nCpf Valido\n");
+                    break;
+                }
+                else{
+                    printf("\nCpf Invalido\n");
+                    printf("\nDeseja tentar novamente? 'Sim' ou 'Não'!!!\n");
+                    gets(rep);
+                }
+            }
+            else{
+                printf("\nCpf Invalido\n");
+                printf("\nDeseja tentar novamente? 'Sim' ou 'Não'!!!");
+                gets(rep);
+            }
+        }while(strcmp(strlwr(rep),"sim")==0);
+        printf("Endereço: ");
+        gets(cad[i].endereco);
+        printf("(DDD) + Telefone: ");
+        gets(cad[i].telefone);
+        printf("E-mail: ");
+        gets(cad[i].email);
+        printf("Plano - Digite M para Mensal ou S para Semestral: ");
+        scanf("%c",&cad[i].plano);
+        while ((getchar()) != '\n');
+        printf("Forma de Pagamento - Digite C para Cartão ou B para Boleto: ");
+        scanf("%c",&cad[i].pagto);
+        while ((getchar()) != '\n');
+        printf("Município que presta serviço (Digite A para Araraquara, S para São Carlos, e R para Ribeirão Preto): ");
+        scanf("%c", &cad[i].municipio);
+        while ((getchar()) != '\n');
+        printf("\nDESEJA CONTINUAR CADASTRANDO? (S/N)\n");
+        scanf("%c", &s_n);
+        s_n=tolower(s_n);
+        i++;
+    }while(s_n!= 'n');
+    printf("\nCadastro de cliente concluído com sucesso!\n");
+}
+
+int relatorioMunicAra(cadastro_cliente cad[100]){
+
+    int i, qtd=0;
+    char textoMinusculo;
+
+    for(i=0; i<cad[i].municipio; i++){
+        textoMinusculo=tolower(cad[i].municipio);
+        if(textoMinusculo == 'a')
+            qtd++;}
+    return qtd;
+}
+int relatorioMunicRib(cadastro_cliente cad[100]){
+
+    int i, qtd=0;
+    char t_Minus;
+
+    for(i=0; i<cad[i].municipio; i++){
+        t_Minus=tolower(cad[i].municipio);
+        if (t_Minus == 'r')
+            qtd++;}
+
+    return qtd;
+}
+int relatorioMunicSao(cadastro_cliente cad[100]){
+
+    int i, qtd=0;
+    char t_Minus;
+
+    for(i=0; i<cad[i].municipio; i++){
+        t_Minus=tolower(cad[i].municipio);
+        if (t_Minus == 's')
+            qtd++;}
+
+    return qtd;
+}
+
+
+int pagamentoCartao(cadastro_cliente cad[100]){
+
+    int i, pagcartao=0;
+    char t_Minus;
+
+    for(i=0; i<cad[i].pagto; i++){
+        t_Minus=tolower(cad[i].pagto);
+        if (t_Minus == 'c')
+            pagcartao++;}
+
+    return pagcartao;
+}
+int pagamentoBoleto(cadastro_cliente cad[100]){
+
+    int i, pagboleto=0;
+    char t_Minus;
+
+     for(i=0;i<cad[i].pagto; i++){
+        t_Minus=tolower(cad[i].pagto);
+        if (t_Minus == 'b')
+            pagboleto++;}
+
+     return pagboleto;
+}
+
+int relatorioPlanosMensal(cadastro_cliente cad[100]){
+    int i, qtd=0;
+    char textoMinusculo;
+
+    for (i=0; i<cad[i].plano; i++){
+        textoMinusculo=tolower(cad[i].plano);
+            if (textoMinusculo == 'm')
+            qtd++;
+    }
+       return qtd;
+}
+
+int relatorioPlanosSemestral(cadastro_cliente cad[100]){
+    int i, qtd=0;
+    char textoMinusculo;
+
+    for (i=0; i<cad[i].plano; i++){
+        textoMinusculo=tolower(cad[i].plano);
+            if (textoMinusculo == 's')
+                qtd++;
+    }
+     return qtd;
+}
+
+void menuRelatorio(cadastro_cliente cad[100])
+{
+    int opcao, qtdmensal, qtdsemestral, pagcartao, pagboleto, Araraquara, ribeirao_Preto, sao_Carlos;
+
+    do
+    {
+        printf("\n------- MENU RELATÓRIOS -------\n");
+        printf("\n[1] Relatório - Plano");
+        printf("\n[2] Relatório - Forma de Pagamento");
+        printf("\n[3] Relatório - Município de Atendimento");
+        printf("\n[0] Sair do programa\n");
+        scanf("%i", &opcao);
+        switch (opcao)
+        {
+        case 1:
+            qtdmensal=relatorioPlanosMensal(cad);
+            qtdsemestral=relatorioPlanosSemestral(cad);
+            printf("\n------- RELATÓRIO - PLANO -------\n"); // ATUALIZAR
+            printf("\nQuantidade de Clientes - Plano Mensal: %d", qtdmensal);
+            printf("\nQuantidade de Clientes - Plano Semestral: %d\n", qtdsemestral);
+            printf ("\n");
+            system("pause");
+            system("cls");
+            break;
+
+        case 2:
+                while ((getchar()) != '\n');
+                pagcartao= pagamentoCartao(cad);
+                pagboleto= pagamentoBoleto(cad);
+                printf("\n------- RELATÓRIO - FORMA DE PAGAMENTO -------\n");
+                printf("\nQuantidade de Clientes - Pagamento Cartão (crédito/débito): %i", pagcartao);
+                printf("\nQuantidade de clientes - Pagamento Boleto: %i\n", pagboleto);
+                printf ("\n");
+                system("pause");
+                system("cls");
+            break;
+
+        case 3:
+                while ((getchar()) != '\n');
+                Araraquara=relatorioMunicAra(cad);
+                ribeirao_Preto=relatorioMunicRib(cad);
+                sao_Carlos=relatorioMunicSao(cad);
+                printf("\n------- RELATÓRIO - MUNICÍPIO DE ATENDIMENTO -------\n");
+                printf("\nQuantidade de Clientes - Prestam Serviço no de Município de Araraquara: %i", Araraquara);
+                printf("\nQuantidade de Clientes - Prestam Serviço no de Ribeirão Preto: %i", ribeirao_Preto);
+                printf("\nQuantidade de Clientes - Prestam Serviço no de Carlos: %i\n", sao_Carlos);
+                printf ("\n");
+                system("pause");
+                system("cls");
+
+            break;
+
+        case 0:
+            printf("Você saiu dos relatórios!\n");
+            system("pause");
+            system("cls");
+            break;
+        }
+
+    } while (opcao != 0);
+}
+
+void main()
+{
+    setlocale(LC_ALL, "Portuguese");
+    int opcao, i, quantidade3, qtdsemestral, pagcartao, pagboleto, senhaAux, emailAux;
+    char s_n, email1[30], sen[10];
+
+    cadastro_funcionario cadastro[100];
+    cadastro_cliente cad[100];
+
+    printf("------- BEM-VINDO! -------\n");
+
+        printf("\n------- LOGIN -------\n");
+        printf("\nE-mail: ");
+        scanf("%s", &email1);
+        printf("\nSenha: ");
+        scanf("%s", &sen);
+        senhaAux = strcmp(sen, cadastro[i].senha);
+        emailAux = strcmp(email1, cadastro[i].email);
+
+        if (senhaAux==0 && emailAux==0){
+                printf("\nLogado!\n");
+                menuRelatorio(cadastro);}
+    do
+    {
+        printf("\n------- MENU -------\n");
+        printf("\n[1] Cadastrar novo cliente");
+        printf("\n[2] Cadastrar novo funcionário");
+        printf("\n[3] Relatórios");
+        printf("\n[0] Sair do programa\n");
+        scanf("%i", &opcao);
+        while ((getchar()) != '\n');
+
+        switch (opcao)
+        {
+
+        case 1:
+            cliente(cad);
+            system("pause");
+            system("cls");
+            break;
+
+        case 2:
+            cadastrarFunc(cadastro);
+            system("pause");
+            system("cls");
+            break;
+
+        case 3:
+
+            menuRelatorio(cad);
+            break;
+
+        case 0: printf("\nPROGRAMA FINALIZADO!");
+
+        }
+    } while (opcao != 0);
+}
